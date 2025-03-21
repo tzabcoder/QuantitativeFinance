@@ -36,9 +36,7 @@ data.drop(data.index[-1], inplace=True)
 
 # Data Visualization ==================================================
 # Time series plots
-N_ROWS = 6
-N_COLS = 1
-
+N_ROWS, N_COLS = 6, 1
 fig, axes = plt.subplots(nrows=N_ROWS, ncols=N_COLS, figsize=(20, 20), sharex=True)
 fig.suptitle('Energy Sector Data')
 
@@ -49,15 +47,8 @@ for k, v in file_names.items():
     idx += 1
 plt.show()
 
-# Remove the unused columns
-del data['month']
-del data['year']
-
 # Distribution plots
-N_ROWS = 3
-N_COLS = 2
-N_BINS = int(math.sqrt(len(data)))
-
+N_ROWS, N_COLS, N_BINS = 3, 2, int(math.sqrt(len(data)))
 fig, axes = plt.subplots(nrows=N_ROWS, ncols=N_COLS, figsize=(20, 20))
 
 r_idx = 0
@@ -75,15 +66,14 @@ for k, v in file_names.items():
 plt.show()
 
 # Autocorrelation plots
-N_ROWS = 3
-N_COLS = 2
-
+N_ROWS, N_COLS = 3, 2
 fig, axes = plt.subplots(nrows=N_ROWS, ncols=N_COLS)
 
 r_idx = 0
 c_idx = 0
 for k, v in file_names.items():
     plot_acf(data[v], ax=axes[r_idx][c_idx], title=f"{v} ACF", lags=48)
+    axes[r_idx][c_idx].figure.set_size_inches(20, 20)
 
     c_idx += 1
     if c_idx == N_COLS:
@@ -92,15 +82,14 @@ for k, v in file_names.items():
 plt.show()
 
 # Partial autocorrelation plots
-N_ROWS = 3
-N_COLS = 2
-
+N_ROWS, N_COLS = 3, 2
 fig, axes = plt.subplots(nrows=N_ROWS, ncols=N_COLS)
 
 r_idx = 0
 c_idx = 0
 for k, v in file_names.items():
     plot_pacf(data[v], ax=axes[r_idx][c_idx], title=f"{v} PACF")
+    axes[r_idx][c_idx].figure.set_size_inches(20, 20)
 
     c_idx += 1
     if c_idx == N_COLS:
