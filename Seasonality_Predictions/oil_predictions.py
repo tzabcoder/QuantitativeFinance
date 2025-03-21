@@ -12,12 +12,12 @@ plt.style.use('ggplot')
 # Data name mapping (filename, column name)
 # Data was downloaded from FRED (Federal Reserve Economic Data): https://fred.stlouisfed.org/
 file_names = {
-    'data/All_Employees_Oil_Gas_Extraction.csv': 'employees',
-    'data/City_Average_Price_Per_kWH.csv': 'city_average',
-    'data/Industrial_Production_Utilities_Electric_Gas.csv': 'production',
-    'data/Manufacturer_New_Orders_Lighting_Equipment.csv': 'orders_lighting',
-    'data/Manufacturer_New_Orders_Mining_Oil_Gas.csv': 'orders_mining_oil_gas',
-    'data/WTI_Oil_Prices.csv' : 'oil_price'
+    'data/energy_data/All_Employees_Oil_Gas_Extraction.csv': 'employees',
+    'data/energy_data/City_Average_Price_Per_kWH.csv': 'city_average',
+    'data/energy_data/Industrial_Production_Utilities_Electric_Gas.csv': 'production',
+    'data/energy_data/Manufacturer_New_Orders_Lighting_Equipment.csv': 'orders_lighting',
+    'data/energy_data/Manufacturer_New_Orders_Mining_Oil_Gas.csv': 'orders_mining_oil_gas',
+    'data/energy_data/WTI_Oil_Prices.csv' : 'oil_price'
 }
 
 # Read and combine all files using list comprehension and concat
