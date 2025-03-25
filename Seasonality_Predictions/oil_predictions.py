@@ -1,10 +1,12 @@
 # File imports
 import math
+import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
+from statsmodels.stats.diagnostic import acorr_ljungbox
 
 # Package settings
 plt.style.use('ggplot')
@@ -67,12 +69,16 @@ plt.show()
 
 # Autocorrelation plots
 N_ROWS, N_COLS = 3, 2
+
+# Lags based on data length
+N_LAGS = min(40, len(data) // 5)
+
 fig, axes = plt.subplots(nrows=N_ROWS, ncols=N_COLS)
 
 r_idx = 0
 c_idx = 0
 for k, v in file_names.items():
-    plot_acf(data[v], ax=axes[r_idx][c_idx], title=f"{v} ACF", lags=48)
+    plot_acf(data[v], ax=axes[r_idx][c_idx], title=f"{v} ACF", lags=N_LAGS)
     axes[r_idx][c_idx].figure.set_size_inches(20, 20)
 
     c_idx += 1
@@ -88,7 +94,7 @@ fig, axes = plt.subplots(nrows=N_ROWS, ncols=N_COLS)
 r_idx = 0
 c_idx = 0
 for k, v in file_names.items():
-    plot_pacf(data[v], ax=axes[r_idx][c_idx], title=f"{v} PACF")
+    plot_pacf(data[v], ax=axes[r_idx][c_idx], title=f"{v} PACF", lags=N_LAGS)
     axes[r_idx][c_idx].figure.set_size_inches(20, 20)
 
     c_idx += 1
@@ -106,4 +112,22 @@ correlation_matrix = data.corr()
 sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt=".2f")
 plt.show()
 
-# Time Series Decomposition ==================================================
+# Testing for autocorrelation ==================================================
+# For each column in the data, calculate the Ljung-Box test statistic and p-value
+# Null hypothesis: The data is independently distributed (no autocorrelation)
+# Alternative hypothesis: The data is not independently distributed (there is autocorrelation)
+# If the p-value is less than 0.05, we reject the null hypothesis and conclude that there is autocorrelation in the data
+P_VALUE_THRESHOLD = 0.05
+P_VALUE_COL = "lb_pvalue"
+
+for col in data.columns:
+    lb_test = acorr_ljungbox(data[col], lags=N_LAGS, boxpierce=True)
+
+    # Determine if we reject the null hypothesis
+    lb_test['reject_null'] = np.where(lb_test[P_VALUE_COL] < P_VALUE_THRESHOLD, True, False)
+
+    # Determine if there are any non-rejections
+    if lb_test['reject_null'].any() is False:
+        print(f"Test Results ({col}): \n{lb_test}")
+    else:
+        print(f"Reject the null hypothesis for {col}: autocorrelation")
