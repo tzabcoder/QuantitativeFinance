@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
 from statsmodels.stats.diagnostic import acorr_ljungbox
+from statsmodels.tsa.seasonal import seasonal_decompose
 
 # Package settings
 plt.style.use('ggplot')
@@ -131,3 +132,22 @@ for col in data.columns:
         print(f"Test Results ({col}): \n{lb_test}")
     else:
         print(f"Reject the null hypothesis for {col}: autocorrelation")
+
+# Testing for seasonality and trend ============================================
+# For each column in the data, calculate the strength of the seasonal and trend component of the
+# time series. The multiplicative decomposition method is used.
+
+for col in data.columns:
+    decomposed_data = seasonal_decompose(data[col], model='multiplicative')
+
+    # Calculate the strength of the seasonal and trend components
+    F_t = max(0, 1 - (np.var(decomposed_data.resid) / np.var(decomposed_data.trend + decomposed_data.resid)))
+    F_s = max(0, 1 - (np.var(decomposed_data.resid) / np.var(decomposed_data.seasonal + decomposed_data.resid)))
+
+    print(f"{col} => Trend: {round(F_t, 6)} | Seasonal: {round(F_s, 6)}")
+
+# Splitting the data into training and test sets
+TRAIN_PCT = 0.8
+train_size = int(len(data) * TRAIN_PCT)
+
+X, Y = data.iloc[:train_size], data.iloc[train_size:]
