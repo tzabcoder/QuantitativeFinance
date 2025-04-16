@@ -7,6 +7,7 @@ SMB    = Small minus big
 HML    = High minus low book-to-market equity
 RMW    = Robust minus weak
 CMA    = Conservative minus aggressive
+UMD    = Up minus down
 
 **Each factor is created using seperate portfolios.
 
@@ -25,3 +26,7 @@ Calculated by subtracting the average weak from the average robust.
 4. Conservative Minus Aggressive
 Compares the investment tendency of stocks (investment premium)
 Calculated by subtracting the average agressive investment from the average conservative investment
+
+5. Up Minus Down
+Compares the number of up stocks against the number of down stocks (momentum premium).
+Calculated by subtracting the average number of down stocks from the average number of up stocks
