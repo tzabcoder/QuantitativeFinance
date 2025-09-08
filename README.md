@@ -2,4 +2,4 @@
 
 ---
 
-Reference for quantitative finance methods.
+Reference and exploration of quantitative finance methods.
